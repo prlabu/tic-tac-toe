@@ -1,10 +1,11 @@
+require 'fileutils'
+
 
 class Player
+	attr_accessor :name
 
-	def initialize ()
-		name = gets.chomp
-		player_exists(name) ?  "Nope" : $player_array << name
-
+	def initialize (name)
+		@name = name
 	end
 
 end
@@ -12,7 +13,6 @@ end
 def player_exists? (name)
 		$player_array.any? { |a_name| a_name == name  }
 end
-
 
 class Game
 
@@ -98,6 +98,7 @@ until usrput == "Quit"
 		puts "Let's create a new player \n"
 		puts "What would you like the name to be?"
 		usrput = get_input
+
 		while player_exists? (usrput)
 		  	puts "The name already exists! Try again: "
 		  	usrput = get_input
@@ -106,11 +107,20 @@ until usrput == "Quit"
 		$player_array << usrput
 
 
-
 		puts "The full list of players: "
 		$player_array.each do |name|
 			puts name + "\n"
 		end
+
+		new_file_name =  'playerFile-#{usrput}.txt'
+		FileUtils.touch(new_file_name)
+		File.open(new_file_name, "w") do |io|  
+			io.puts "Name: #{usrput}"
+		end
+
+
+
+
 	end
 end
 
